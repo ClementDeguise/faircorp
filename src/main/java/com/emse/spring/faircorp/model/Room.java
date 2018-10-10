@@ -16,7 +16,7 @@ public class Room {
     private Long id;
 
     @NotNull
-    private Integer level;
+    private Integer floor;
 
     @NotNull
     private String name;
@@ -28,8 +28,8 @@ public class Room {
     public Room() {
     }
 
-    public Room(Integer level) {
-        this.level = level;
+    public Room(Integer floor) {
+        this.floor = floor;
 
     }
 
@@ -54,11 +54,11 @@ public class Room {
     }
 
     public Integer getLevel() {
-        return level;
+        return floor;
     }
 
-    public void setLevel(Integer level) {
-        this.level = level;
+    public void setLevel(Integer floor) {
+        this.floor = floor;
     }
 
     public String getName() {
