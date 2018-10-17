@@ -1,15 +1,13 @@
 package com.emse.spring.faircorp.model;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
 public class Room {
+
 
     @Id
     @GeneratedValue
@@ -25,25 +23,34 @@ public class Room {
     private Set<Light> light;
 
 
+    @ManyToOne(optional = false)
+    private Building building;
+
+
     public Room() {
     }
 
-    public Room(Integer floor) {
+    public Room(Integer floor, String name, Building building) {
         this.floor = floor;
+        this.building = building;
+        this.name = name;
 
     }
 
-/*
-    public Light getLight() {
-        return light;
+    public Building getBuilding() {
+        return building;
     }
 
-    public void setLight(Light light) {
-        this.light = light;
+    public void setBuilding(Building building) {
+        this.building = building;
     }
-*/
 
 
+
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return this.id;
@@ -64,11 +71,6 @@ public class Room {
     public String getName() {
         return name;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
 
 
 }
