@@ -15,7 +15,7 @@ public class Light {
     private Integer level;      //étage
 
     @NotNull
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Status status;  //allumé ou eteinte, ON/OFF
 
 
