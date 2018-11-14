@@ -44,7 +44,6 @@ public class LightController {
     @PostMapping
     public LightDto create(@RequestBody LightDto dto) {
         Light light = null;
-        if (dto.getId() != null) light = lightDao.findById(dto.getId()).orElse(null);
 
         if (light == null) {
             light = lightDao.save(new Light(roomDao.getOne(dto.getRoomId()), dto.getLevel(), dto.getStatus()));
@@ -55,6 +54,8 @@ public class LightController {
             light.setStatus(dto.getStatus());
             lightDao.save(light);
         }
+
+        if (dto.getId() != null) light = lightDao.findById(dto.getId()).orElse(null);
 
         return new LightDto(light);
     }

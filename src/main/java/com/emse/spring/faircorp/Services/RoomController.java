@@ -20,8 +20,6 @@ public class RoomController {
     private RoomDAO roomDao;
     @Autowired
     private BuildingDAO buildingDao;
-    @Autowired
-    private RoomCustomDAO roomcustomDao;
 
 
     @GetMapping
@@ -42,7 +40,7 @@ public class RoomController {
         //find the room
         //retrieve the list of lights
         //create a light class and use the custom room DAO to find all the corresponding lights
-        List<Light> lights = roomcustomDao.findLightbyRoomId(id);
+        List<Light> lights = roomDao.findLightbyRoomId(id);
 
         //itère pour chaque element de la liste
         lights.forEach(light -> light.setStatus(light.getStatus() == Status.ON ? Status.OFF: Status.ON));

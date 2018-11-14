@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 public class Light {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
@@ -33,8 +33,8 @@ public class Light {
         this.room = room;
     }
 
-    public Room getRoom() {
-        return room;
+    public Long getRoomId() {
+        return room.getId();
     }
 
     public void setRoom(Room room) {
