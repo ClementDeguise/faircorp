@@ -14,6 +14,8 @@ public class LightDto { //Dto = Data Transfert Object
         this.id = light.getId();
         this.level = light.getLevel();
         this.status = light.getStatus();
+        this.room = light.getRoom();
+
     }
 
     public Long getId() {

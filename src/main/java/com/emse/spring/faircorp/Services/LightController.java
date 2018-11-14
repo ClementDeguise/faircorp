@@ -9,19 +9,19 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping("/api/lights")
 @Transactional
 public class LightController {
 
     @Autowired
-    private LightDAO lightDao; // (4)
+    private LightDAO lightDao;
     @Autowired
     private RoomDAO roomDao;
 
 
-    @GetMapping // (5)
+    @GetMapping
     public List<LightDto> findAll() {
         return lightDao.findAll()
                 .stream()
@@ -48,6 +48,8 @@ public class LightController {
 
         if (light == null) {
             light = lightDao.save(new Light(roomDao.getOne(dto.getRoomId()), dto.getLevel(), dto.getStatus()));
+            // methode de base de la DAO
+            // l'ordre d'appel est important et doit respecter celui du constructeur
         } else {
             light.setLevel(dto.getLevel());
             light.setStatus(dto.getStatus());
