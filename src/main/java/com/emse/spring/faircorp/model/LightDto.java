@@ -5,7 +5,7 @@ public class LightDto { //Dto = Data Transfert Object
     private Long id;
     private Integer level;
     private Status status;
-    private Long roomid;
+    private Long roomId;
 
     public LightDto() {
     }
@@ -14,7 +14,7 @@ public class LightDto { //Dto = Data Transfert Object
         this.id = light.getId();
         this.level = light.getLevel();
         this.status = light.getStatus();
-        this.roomid = light.getRoomId();
+        this.roomId = light.getRoomId();
 
     }
 
@@ -31,7 +31,7 @@ public class LightDto { //Dto = Data Transfert Object
     }
 
     public Long getRoomId() {
-        return roomid;
+        return roomId;
     }
 }
 
