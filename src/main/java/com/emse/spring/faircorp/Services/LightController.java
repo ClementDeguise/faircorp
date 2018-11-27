@@ -38,6 +38,7 @@ public class LightController {
     public LightDto switchStatus(@PathVariable Long id) {
         Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
         light.setStatus(light.getStatus() == Status.ON ? Status.OFF: Status.ON);
+        //si getStatus renvoie Status.ON, alors Status.OFF, else: Status.ON
         return new LightDto(light);
     }
 
