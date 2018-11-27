@@ -30,12 +30,12 @@ public class RoomController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/{room_id}")
+    @GetMapping(path = "/{id}")
     public RoomDto findById(@PathVariable Long id) {
         return roomDao.findById(id).map(room -> new RoomDto(room)).orElse(null);
     }
 
-    @PutMapping(path = "/{room_id}/switch")
+    @PutMapping(path = "/{id}/switch")
     public RoomDto switchStatus(@PathVariable Long id) {
         //find the room
         //retrieve the list of lights
@@ -68,7 +68,7 @@ public class RoomController {
         return new RoomDto(room);
     }
 
-    @DeleteMapping(path = "/{room_id}")
+    @DeleteMapping(path = "/{id}")
     public void delete(@PathVariable Long id) {
         roomDao.deleteById(id);
     }

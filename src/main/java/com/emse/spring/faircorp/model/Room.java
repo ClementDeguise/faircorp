@@ -37,8 +37,8 @@ public class Room {
 
     }
 
-    public Building getBuilding() {
-        return building;
+    public Long getBuildingId() {
+        return building.getId();
     }
 
     public void setBuilding(Building building) {
