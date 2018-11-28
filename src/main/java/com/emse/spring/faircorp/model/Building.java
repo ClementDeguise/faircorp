@@ -17,7 +17,7 @@ public class Building {
     private Long id;
 
     @NotNull
-    private Integer numoffloor;
+    private Integer numOfFloor;
 
     @OneToMany(mappedBy = "building")       //nom du lien identique
     private Set<Room> rooms;
@@ -26,8 +26,8 @@ public class Building {
     public Building() {
     }
 
-    public Building(Integer numoffloor) {
-        this.numoffloor = numoffloor;
+    public Building(Integer numOfFloor) {
+        this.numOfFloor = numOfFloor;
 
     }
 
@@ -40,11 +40,11 @@ public class Building {
     }
 
     public Integer getLevel() {
-        return numoffloor;
+        return numOfFloor;
     }
 
-    public void setLevel(Integer floor) {
-        this.numoffloor = floor;
+    public void setLevel(Integer numOfFloor) {
+        this.numOfFloor = numOfFloor;
     }
 
 }

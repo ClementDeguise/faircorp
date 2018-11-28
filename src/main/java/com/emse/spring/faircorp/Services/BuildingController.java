@@ -40,11 +40,11 @@ public class BuildingController {
         if (dto.getId() != null) building = buildingDao.findById(dto.getId()).orElse(null);
 
         if (building == null) {
-            building = buildingDao.save(new Building(dto.getNumOfFloors()));
+            building = buildingDao.save(new Building(dto.getNumOfFloor()));
             // methode de base de la DAO
             // l'ordre d'appel est important et doit respecter celui du constructeur
         } else {
-            building.setLevel(dto.getNumOfFloors());
+            building.setLevel(dto.getNumOfFloor());
             buildingDao.save(building);
         }
 

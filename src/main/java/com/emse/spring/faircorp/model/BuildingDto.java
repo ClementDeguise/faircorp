@@ -3,7 +3,7 @@ package com.emse.spring.faircorp.model;
 public class BuildingDto {
 
     private Long id;
-    private Integer numoffloor;
+    private Integer numOfFloor;
 
 
     public BuildingDto() {
@@ -11,7 +11,7 @@ public class BuildingDto {
 
     public BuildingDto(Building building) {
         this.id = building.getId();
-        this.numoffloor = building.getLevel();
+        this.numOfFloor = building.getLevel();
 
 
     }
@@ -20,8 +20,8 @@ public class BuildingDto {
         return id;
     }
 
-    public Integer getNumOfFloors() {
-        return numoffloor;
+    public Integer getNumOfFloor() {
+        return numOfFloor;
     }
 
 }
