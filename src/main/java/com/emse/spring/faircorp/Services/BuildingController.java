@@ -10,8 +10,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@CrossOrigin
+
 @RestController
+@CrossOrigin
 @RequestMapping("/api/buildings")
 @Transactional
 public class BuildingController {
@@ -29,7 +30,7 @@ public class BuildingController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/{building_id}")
+    @GetMapping(path = "/{id}")
     public BuildingDto findById(@PathVariable Long id) {
         return buildingDao.findById(id).map(building -> new BuildingDto(building)).orElse(null);
     }
@@ -51,7 +52,7 @@ public class BuildingController {
         return new BuildingDto(building);
     }
 
-    @DeleteMapping(path = "/{building_id}")
+    @DeleteMapping(path = "/{id}")
     public void delete(@PathVariable Long id) {
         buildingDao.deleteById(id);
     }
