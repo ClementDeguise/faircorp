@@ -23,6 +23,7 @@ public class RoomController {
     private BuildingDAO buildingDao;
 
 
+    @CrossOrigin
     @GetMapping
     public List<RoomDto> findAll() {
         return roomDao.findAll()
@@ -31,11 +32,13 @@ public class RoomController {
                 .collect(Collectors.toList());
     }
 
+    @CrossOrigin
     @GetMapping(path = "/{id}")
     public RoomDto findById(@PathVariable Long id) {
         return roomDao.findById(id).map(room -> new RoomDto(room)).orElse(null);
     }
 
+    @CrossOrigin
     @PutMapping(path = "/{id}/switch")
     public RoomDto switchStatus(@PathVariable Long id) {
         //find the room
@@ -51,6 +54,7 @@ public class RoomController {
         return new RoomDto(room);
     }
 
+    @CrossOrigin
     @PostMapping
     public RoomDto create(@RequestBody RoomDto dto) {
         Room room = null;
@@ -69,6 +73,7 @@ public class RoomController {
         return new RoomDto(room);
     }
 
+    @CrossOrigin
     @DeleteMapping(path = "/{id}")
     public void delete(@PathVariable Long id) {
         roomDao.deleteById(id);

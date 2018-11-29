@@ -21,7 +21,7 @@ public class BuildingController {
     private BuildingDAO buildingDao;
 
 
-
+    @CrossOrigin
     @GetMapping
     public List<BuildingDto> findAll() {
         return buildingDao.findAll()
@@ -30,11 +30,13 @@ public class BuildingController {
                 .collect(Collectors.toList());
     }
 
+    @CrossOrigin
     @GetMapping(path = "/{id}")
     public BuildingDto findById(@PathVariable Long id) {
         return buildingDao.findById(id).map(building -> new BuildingDto(building)).orElse(null);
     }
 
+    @CrossOrigin
     @PostMapping
     public BuildingDto create(@RequestBody BuildingDto dto) {
         Building building = null;
@@ -52,6 +54,7 @@ public class BuildingController {
         return new BuildingDto(building);
     }
 
+    @CrossOrigin
     @DeleteMapping(path = "/{id}")
     public void delete(@PathVariable Long id) {
         buildingDao.deleteById(id);
