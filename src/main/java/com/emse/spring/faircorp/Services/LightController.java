@@ -65,8 +65,9 @@ public class LightController {
         return new LightDto(light);
     }
 
-    @CrossOrigin
+
     @DeleteMapping(path = "/{id}")
+    @CrossOrigin
     public void delete(@PathVariable Long id) {
         lightDao.deleteById(id);
     }
