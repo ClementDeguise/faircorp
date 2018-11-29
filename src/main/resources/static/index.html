@@ -1,11 +1,142 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Spring in practice</title>
-</head>
-<body>
-    test test
-</body>
-</html>
+    <meta charset="utf-8">
+    <meta name="auteur" content="Clement Deguise">
+    <meta name="description" content="Page de gestion de l'API des lumières, sons et pièces d'un immeuble">
+    <link rel="stylesheet" href="Styles/style.css">
 
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <title>Gestion de l'immeuble</title>
+</head>
+<header>
+    <h1>Interface de gestion de l'immeuble</h1>
+</header>
+
+<body>
+
+<nav class="formulaire" id="sidebar">
+    <h3 class="bt_bar_title">Add building</h3>
+
+    <input type="number" v-model="bt_message_id" placeholder="building id">
+    <input type="number" v-model="bt_message_floor" placeholder="number of floors">
+    <button class = "addition" id="bt_add" v-on:click="postbt">Add</button>
+
+    <hr>
+    <h3 class="rm_bar_title">Add room</h3>
+
+    <input type="number" v-model="rm_message_floor" placeholder="floor">
+    <input type="text" v-model="rm_message_name" placeholder="name">
+    <input type="number" v-model="rm_message_bat" placeholder="building">
+
+    <button class="addition" id="rm_add" v-on:click="postrm">Add</button>
+
+    <hr>
+    <h3 class="lt_bar_title">Add light</h3>
+
+    <input type="number" v-model="lt_message_level" placeholder="level">
+    <input type="text" v-model="lt_message_status" placeholder="status">
+    <input type="number" v-model="lt_message_room" placeholder="room">
+
+    <button class="addition" id="lt_add" v-on:click="postlt">Add</button>
+</nav>
+
+
+<main>
+
+
+
+    <div id="building">
+        <table class="building">
+            <caption><b><u>BUILDINGS</u></b></caption>
+            <thead>
+            <tr>
+                <th>Building ID</th>
+                <th>Number of Floors</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr  v-for="item in buildings">
+                <td>{{item.id}}</td>
+                <td>{{item.numOfFloor}}</td>
+                <td><button class="deletion" v-bind:id="item.id" v-on:click="detbat"><span>Delete</span></button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div id="room">
+        <table class="room">
+            <caption><b><u>ROOMS</u></b></caption>
+            <thead>
+            <tr>
+                <th>Room ID</th>
+                <th>Floor</th>
+                <th>Name</th>
+                <th>Building</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="item in rooms">
+                <td>{{item.id}}</td>
+                <td>{{item.floor}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.buildingId}}</td>
+                <td><button class="deletion" v-bind:id="item.id" v-on:click="detrm"><span>Delete</span></button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div id="light">
+        <table class="light">
+            <caption><b><u>LIGHTS</u></b></caption>
+            <thead>
+            <tr>
+                <th>Light ID</th>
+                <th>Level</th>
+                <th>Room</th>
+                <th>Status</th>
+                <th>Switch Light</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="item in lights">
+                <td>{{item.id}}</td>
+                <td>{{item.level}}</td>
+                <td>{{item.roomId}}</td>
+                <td>{{item.status}}</td>
+                <td><button class="button" v-bind:id="item.id" v-on:click="switchlt(item.id)" ></td>
+                <td>
+                    <div v-if="item.status == 'ON'">
+                        <img src="https://us.123rf.com/450wm/almagami/almagami1605/almagami160500030/69649030-light-bulb-on-transparent-background-vector-eps10-.jpg?ver=6">
+                    </div>
+                    <div v-else-if="item.status == 'OFF'">
+                        <img src="https://i.dailymail.co.uk/i/pix/2014/01/26/article-2546363-1AFB247500000578-934_306x423.jpg">
+                    </div>
+                </td>
+                <td><button class="deletion" v-bind:id="item.id" v-on:click="detlt"><span>Delete</span></button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</main>
+
+<script src="Scripts/Populate.js"></script>
+<!--script src="Scripts/jsonRecup.js"></script-->
+
+</body>
+
+</html>
