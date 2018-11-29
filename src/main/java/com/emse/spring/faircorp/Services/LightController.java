@@ -5,12 +5,14 @@ import com.emse.spring.faircorp.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 @RestController
+
 @CrossOrigin
 @RequestMapping("/api/lights")
 @Transactional
@@ -68,7 +70,8 @@ public class LightController {
 
     @DeleteMapping(path = "/{id}")
     @CrossOrigin
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id, HttpServletResponse response) {
         lightDao.deleteById(id);
+        response.setHeader("Access-Control-Allow-Origin", "*");
     }
 }
