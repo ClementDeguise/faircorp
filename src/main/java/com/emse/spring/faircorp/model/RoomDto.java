@@ -5,7 +5,7 @@ public class RoomDto { //Dto = Data Transfert Object
     private Long id;
     private Integer floor;
     private String name;
-    private Long buildingId;
+    //private Long buildingId;
 
     public RoomDto() {
     }
@@ -14,7 +14,7 @@ public class RoomDto { //Dto = Data Transfert Object
         this.id = room.getId();
         this.floor = room.getLevel();
         this.name = room.getName();
-        this.buildingId = room.getBuildingId();
+        //this.buildingId = room.getBuildingId();
 
     }
 
@@ -30,8 +30,9 @@ public class RoomDto { //Dto = Data Transfert Object
         return name;
     }
 
-    public Long getBuildingId() {
+   /* public Long getBuildingId() {
         return buildingId;
     }
+    */
 }
 

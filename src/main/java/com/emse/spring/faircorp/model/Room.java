@@ -22,21 +22,22 @@ public class Room {
     @OneToMany(mappedBy = "room")       //nom du lien identique
     private Set<Light> light;
 
-
+/*
     @ManyToOne(optional = false)
     private Building building;
-
+*/
 
     public Room() {
     }
 
-    public Room(Integer floor, String name, Building building) {
+    public Room(Integer floor, String name) {
         this.floor = floor;
-        this.building = building;
+        //this.building = building;
         this.name = name;
 
     }
 
+/*
     public Long getBuildingId() {
         return building.getId();
     }
@@ -44,7 +45,7 @@ public class Room {
     public void setBuilding(Building building) {
         this.building = building;
     }
-
+*/
 
 
 
