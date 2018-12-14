@@ -1,6 +1,7 @@
 package com.emse.spring.faircorp.Services;
 
 
+import com.emse.spring.faircorp.Services.Subscriber;
 import com.emse.spring.faircorp.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
+
+
+
 
 
 @RestController
@@ -23,18 +27,32 @@ public class LightController {
     @Autowired
     private RoomDAO roomDao;
 
+    public String getMessage;
+    public String getMessageById;
+
+
+
+
+
     @CrossOrigin
     @GetMapping
     public List<LightDto> findAll() {
+
+        getMessage = lightDao.SetGetMessage("GET");
+
         return lightDao.findAll()
                 .stream()
                 .map(LightDto::new)
                 .collect(Collectors.toList());
     }
 
+
     @CrossOrigin
     @GetMapping(path = "/{id}")
     public LightDto findById(@PathVariable Long id) {
+
+        getMessageById = lightDao.SetGetByIdMessage("GET", id);
+
         return lightDao.findById(id).map(light -> new LightDto(light)).orElse(null);
     }
 
@@ -47,17 +65,19 @@ public class LightController {
         return new LightDto(light);
     }
 
+
+/*
     @CrossOrigin
     @PostMapping
     public LightDto create(@RequestBody LightDto dto) {
         Light light = null;
 
         if (light == null) {
-            light = lightDao.save(new Light(roomDao.getOne(dto.getRoomId()), dto.getLevel(), dto.getStatus()));
+            light = lightDao.save(new Light(roomDao.getOne(dto.getRoomId()), dto.getColor(), dto.getStatus()));
             // methode de base de la DAO
             // l'ordre d'appel est important et doit respecter celui du constructeur
         } else {
-            light.setLevel(dto.getLevel());
+            light.setColor(dto.getColor());
             light.setStatus(dto.getStatus());
             lightDao.save(light);
         }
@@ -73,5 +93,5 @@ public class LightController {
     public void delete(@PathVariable Long id, HttpServletResponse response) {
         lightDao.deleteById(id);
         response.setHeader("Access-Control-Allow-Origin", "*");
-    }
+    }*/
 }

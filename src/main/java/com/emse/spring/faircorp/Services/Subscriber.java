@@ -3,6 +3,9 @@ package com.emse.spring.faircorp.Services;
 
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,7 +17,7 @@ import java.net.URISyntaxException;
  * A sample application that demonstrates how to use the Paho MQTT v3.1 Client blocking API.
  */
 
-//Asynchronous
+@Configuration
 public class Subscriber implements MqttCallback {
 
     // initialisation
@@ -22,9 +25,10 @@ public class Subscriber implements MqttCallback {
     private String topic = "actuator";
     private MqttClient client;
     private String clientId = "SpringServer";
+    public String message;
 
 
-
+    @Autowired
     public Subscriber (String host, String username, String password) throws MqttException {
 
         MqttConnectOptions conOpt = new MqttConnectOptions();
@@ -44,6 +48,52 @@ public class Subscriber implements MqttCallback {
         this.client.subscribe(this.topic, qos);
 
     }
+
+
+
+    // publish a String to the topic
+    @Bean
+    public void sendMessage(String payload) throws MqttException {
+        MqttMessage message = new MqttMessage(payload.getBytes());
+        message.setQos(qos);
+        this.client.publish(this.topic, message); // Blocking publish
+        System.out.println("Publishing message: "+ message);
+        System.out.println("Message published");
+    }
+
+    /**
+     * @see MqttCallback#connectionLost(Throwable)
+     */
+    @Bean
+    public void connectionLost(Throwable cause) {
+        System.out.println("Connection lost because: " + cause);
+        System.exit(1);
+    }
+
+    /**
+     * @see MqttCallback#deliveryComplete(IMqttDeliveryToken)
+     */
+    @Bean
+    public void deliveryComplete(IMqttDeliveryToken token) {
+    }
+
+    /**
+     * @see MqttCallback#messageArrived(String, MqttMessage)
+     */
+    @Bean
+    public void messageArrived(String topic, MqttMessage message) throws MqttException {
+
+        this.message = String.format("[%s] %s", topic, new String(message.getPayload()));
+        System.out.println(message);
+
+    }
+
+
+
+
+
+
+
 
 /*
     public Subscriber(String uri) throws MqttException, URISyntaxException {
@@ -84,35 +134,7 @@ public class Subscriber implements MqttCallback {
 */
 
 
-    // publish a String to the topic
-    public void sendMessage(String payload) throws MqttException {
-        MqttMessage message = new MqttMessage(payload.getBytes());
-        message.setQos(qos);
-        this.client.publish(this.topic, message); // Blocking publish
-        System.out.println("Publishing message: "+ message);
-        System.out.println("Message published");
-    }
 
-    /**
-     * @see MqttCallback#connectionLost(Throwable)
-     */
-    public void connectionLost(Throwable cause) {
-        System.out.println("Connection lost because: " + cause);
-        System.exit(1);
-    }
-
-    /**
-     * @see MqttCallback#deliveryComplete(IMqttDeliveryToken)
-     */
-    public void deliveryComplete(IMqttDeliveryToken token) {
-    }
-
-    /**
-     * @see MqttCallback#messageArrived(String, MqttMessage)
-     */
-    public void messageArrived(String topic, MqttMessage message) throws MqttException {
-        System.out.println(String.format("[%s] %s", topic, new String(message.getPayload())));
-    }
 
 
 

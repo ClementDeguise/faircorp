@@ -1,17 +1,18 @@
 package com.emse.spring.faircorp;
 
+
 import com.emse.spring.faircorp.Services.Subscriber;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.net.URISyntaxException;
 
 @SpringBootApplication
 public class FaircorpApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FaircorpApplication.class, args);
+
 
 		Subscriber s = null;
 		try {
@@ -31,16 +32,10 @@ public class FaircorpApplication {
 			}
 		}
 
-
-
-
-
-
-
-
-
 	}
+
 }
+
 
 
 

@@ -14,38 +14,20 @@ public class Room {
     private Long id;
 
     @NotNull
-    private Integer floor;
-
-    @NotNull
     private String name;
 
     @OneToMany(mappedBy = "room")       //nom du lien identique
     private Set<Light> light;
 
-/*
-    @ManyToOne(optional = false)
-    private Building building;
-*/
-
     public Room() {
     }
 
-    public Room(Integer floor, String name) {
-        this.floor = floor;
-        //this.building = building;
+    public Room( String name) {
+
         this.name = name;
 
     }
 
-/*
-    public Long getBuildingId() {
-        return building.getId();
-    }
-
-    public void setBuilding(Building building) {
-        this.building = building;
-    }
-*/
 
 
 
@@ -59,14 +41,6 @@ public class Room {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getLevel() {
-        return floor;
-    }
-
-    public void setLevel(Integer floor) {
-        this.floor = floor;
     }
 
     public String getName() {

@@ -8,11 +8,12 @@ import javax.validation.constraints.NotNull;
 public class Light {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+   // @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
+    // HEX COLOR
     @NotNull
-    private Integer level;      //étage
+    private String color;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -27,8 +28,8 @@ public class Light {
     public Light() {
     }
 
-    public Light(Room room, Integer level, Status status) {
-        this.level = level;
+    public Light(Room room, String color, Status status) {
+        this.color = color;
         this.status = status;
         this.room = room;
     }
@@ -51,12 +52,12 @@ public class Light {
         this.id = id;
     }
 
-    public Integer getLevel() {
-        return level;
+    public String getColor() {
+        return color;
     }
 
-    public void setLevel(Integer level) {
-        this.level = level;
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public Status getStatus() {

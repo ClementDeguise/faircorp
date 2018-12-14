@@ -3,7 +3,7 @@ package com.emse.spring.faircorp.model;
 public class LightDto { //Dto = Data Transfert Object
 
     private Long id;
-    private Integer level;
+    private String color;
     private Status status;
     private Long roomId;
 
@@ -12,7 +12,7 @@ public class LightDto { //Dto = Data Transfert Object
 
     public LightDto(Light light) {
         this.id = light.getId();
-        this.level = light.getLevel();
+        this.color = light.getColor();
         this.status = light.getStatus();
         this.roomId = light.getRoomId();
 
@@ -22,8 +22,8 @@ public class LightDto { //Dto = Data Transfert Object
         return id;
     }
 
-    public Integer getLevel() {
-        return level;
+    public String getColor() {
+        return color;
     }
 
     public Status getStatus() {

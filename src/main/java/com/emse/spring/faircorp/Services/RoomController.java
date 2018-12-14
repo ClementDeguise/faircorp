@@ -19,8 +19,7 @@ public class RoomController {
 
     @Autowired
     private RoomDAO roomDao;
-    //@Autowired
-    //private BuildingDAO buildingDao;
+
 
 
     @CrossOrigin
@@ -61,11 +60,10 @@ public class RoomController {
         if (dto.getId() != null) room = roomDao.findById(dto.getId()).orElse(null);
 
         if (room == null) {
-            room = roomDao.save(new Room(dto.getFloor(), dto.getName()));
+            room = roomDao.save(new Room(dto.getName()));
             // methode de base de la DAO
             // l'ordre d'appel est important et doit respecter celui du constructeur
         } else {
-            room.setLevel(dto.getFloor());
             room.setName(dto.getName());
             roomDao.save(room);
         }
