@@ -30,4 +30,11 @@ public class LightDAOImpl implements LightCustomDAO {
         String message = method + "http://192.168.1.131/api/xCXbljoa3kZ-iI0yQIc6luELl2mdtQjBnX5SkO8x/lights/" + idS;
         return message;
     }
+
+    public String SetPutMessage(String method, Long id, String body) {
+        String idS = String.valueOf(id);
+        String message = method + "http://192.168.1.131/api/xCXbljoa3kZ-iI0yQIc6luELl2mdtQjBnX5SkO8x/lights/" + idS + "/state " + body;
+        return message;
+    }
+
 }

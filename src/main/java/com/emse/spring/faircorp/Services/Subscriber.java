@@ -17,7 +17,7 @@ import java.net.URISyntaxException;
  * A sample application that demonstrates how to use the Paho MQTT v3.1 Client blocking API.
  */
 
-@Configuration
+
 public class Subscriber implements MqttCallback {
 
     // initialisation
@@ -26,15 +26,16 @@ public class Subscriber implements MqttCallback {
     private MqttClient client;
     private String clientId = "SpringServer";
     public String message;
+    public String username = "actuator";
+    public String password = "aaa";
 
 
-    @Autowired
-    public Subscriber (String host, String username, String password) throws MqttException {
+    public Subscriber (String host) throws MqttException {
 
         MqttConnectOptions conOpt = new MqttConnectOptions();
         conOpt.setCleanSession(true);
-        conOpt.setUserName(username);
-        conOpt.setPassword(password.toCharArray());
+        conOpt.setUserName(this.username);
+        conOpt.setPassword(this.password.toCharArray());
 
         // crée le client qui est notre serveur
         this.client = new MqttClient(host, clientId, new MemoryPersistence());
@@ -52,19 +53,21 @@ public class Subscriber implements MqttCallback {
 
 
     // publish a String to the topic
-    @Bean
+
     public void sendMessage(String payload) throws MqttException {
         MqttMessage message = new MqttMessage(payload.getBytes());
         message.setQos(qos);
         this.client.publish(this.topic, message); // Blocking publish
         System.out.println("Publishing message: "+ message);
         System.out.println("Message published");
+       // this.client.disconnect();
+       // System.out.println("Disconnected");
     }
 
     /**
      * @see MqttCallback#connectionLost(Throwable)
      */
-    @Bean
+
     public void connectionLost(Throwable cause) {
         System.out.println("Connection lost because: " + cause);
         System.exit(1);
@@ -73,23 +76,51 @@ public class Subscriber implements MqttCallback {
     /**
      * @see MqttCallback#deliveryComplete(IMqttDeliveryToken)
      */
-    @Bean
+
     public void deliveryComplete(IMqttDeliveryToken token) {
     }
 
     /**
      * @see MqttCallback#messageArrived(String, MqttMessage)
      */
-    @Bean
-    public void messageArrived(String topic, MqttMessage message) throws MqttException {
 
-        this.message = String.format("[%s] %s", topic, new String(message.getPayload()));
+    /**
+     * HANDLE JSON RESPONSE
+     */
+    public void messageArrived(String topic, MqttMessage mes) throws MqttException {
+
+        message = String.format("[%s] %s", topic, new String(mes.getPayload()));
         System.out.println(message);
+
+        String resp = message.substring(0, 4);
+        // header JSON required, string contient SEULEMENT LES ID? STATUS? COLOR & ROOMID
+        if (resp.equals("JSON")) {
+            // map new dto, update light classes
+            //remove JSON header
+            message = message.substring(5);
+
+
+
+        }
+        this.client.disconnect();
+        System.out.println("Disconnected");
 
     }
 
 
 
+
+
+//    public String JsonResponse() {
+//
+//        String resp = this.message.substring(0, 4);
+//        // header JSON required, string contient SEULEMENT LES ID? STATUS? COLOR & ROOMID
+//        if (resp.equals("JSON")) {
+//            // first, convert string into new dto
+//            return resp;
+//
+//        }
+//    }
 
 
 

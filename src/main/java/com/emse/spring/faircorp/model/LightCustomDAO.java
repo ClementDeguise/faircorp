@@ -7,5 +7,6 @@ public interface LightCustomDAO {
     List<Light> findOnLights();
     String SetGetMessage(String method);
     String SetGetByIdMessage(String method, Long id);
+    String SetPutMessage(String method, Long id, String body);
 
 }

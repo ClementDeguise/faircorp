@@ -3,6 +3,7 @@ package com.emse.spring.faircorp.Services;
 
 import com.emse.spring.faircorp.Services.Subscriber;
 import com.emse.spring.faircorp.model.*;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,9 +27,13 @@ public class LightController {
     private LightDAO lightDao;
     @Autowired
     private RoomDAO roomDao;
+    //@Autowired
+    public Subscriber subscriber;
 
-    public String getMessage;
-    public String getMessageById;
+    //private String getMessage;
+   // private String getMessageById;
+
+
 
 
 
@@ -38,7 +43,22 @@ public class LightController {
     @GetMapping
     public List<LightDto> findAll() {
 
-        getMessage = lightDao.SetGetMessage("GET");
+        //ask database
+        //wait for db update on request transfer
+
+        String getMessage = lightDao.SetGetMessage("GET ");
+
+        try {
+            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247");
+            subscriber.sendMessage(getMessage);
+
+        } catch (MqttException me) {
+            System.out.println(me.getMessage());
+        }
+
+        //update of DB on response
+
+
 
         return lightDao.findAll()
                 .stream()
@@ -51,20 +71,85 @@ public class LightController {
     @GetMapping(path = "/{id}")
     public LightDto findById(@PathVariable Long id) {
 
-        getMessageById = lightDao.SetGetByIdMessage("GET", id);
+        String getMessageById = lightDao.SetGetByIdMessage("GET ", id);
+
+        try {
+            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247");
+            subscriber.sendMessage(getMessageById);
+
+        } catch (MqttException me) {
+            System.out.println(me.getMessage());
+        }
 
         return lightDao.findById(id).map(light -> new LightDto(light)).orElse(null);
     }
 
     @CrossOrigin
-    @PutMapping(path = "/{id}/switch")
+    @PutMapping(path = "/{id}/state")
+    public LightDto switchStatus(@PathVariable Long id, @RequestBody String body) {
+
+        Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
+
+        String col;
+
+        try {
+            col = body.substring(11, 15);
+            light.setColor(col);
+        }
+        catch (Exception e){
+            System.out.println("Wrong body type");
+        }
+
+        // body contains either the status or the color, but not both
+        //the HTML page should create the appropriate body whether the light or the color is switched
+        String getPutMessage = lightDao.SetPutMessage("PUT ", id, body);
+
+        try {
+            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247");
+            subscriber.sendMessage(getPutMessage);
+
+        } catch (MqttException me) {
+            System.out.println(me.getMessage());
+        }
+
+        return new LightDto(light);
+    }
+    //{"color": #ffff}
+
+
+
+    @CrossOrigin
+    @PutMapping(path = "/{id}/state")
     public LightDto switchStatus(@PathVariable Long id) {
+
+        String body;
+
         Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
         light.setStatus(light.getStatus() == Status.ON ? Status.OFF: Status.ON);
         //si getStatus renvoie Status.ON, alors Status.OFF, else: Status.ON
+
+        if (light.getStatus() == Status.ON) {
+            body = "{\"status\": ON}";
+        }
+        else {
+            body = "{\"status\": OFF}";
+        }
+
+        // body contains either the status or the color, but not both
+        //the HTML page should create the appropriate body whether the light or the color is switched
+        String getPutMessage = lightDao.SetPutMessage("PUT", id, body);
+
+        try {
+            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247");
+            subscriber.sendMessage(getPutMessage);
+
+        } catch (MqttException me) {
+            System.out.println(me.getMessage());
+        }
+
+
         return new LightDto(light);
     }
-
 
 /*
     @CrossOrigin
