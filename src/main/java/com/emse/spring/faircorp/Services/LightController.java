@@ -3,6 +3,7 @@ package com.emse.spring.faircorp.Services;
 
 import com.emse.spring.faircorp.Services.Subscriber;
 import com.emse.spring.faircorp.model.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -49,8 +50,8 @@ public class LightController {
         String getMessage = lightDao.SetGetMessage("GET ");
 
         try {
-            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247");
-            subscriber.sendMessage(getMessage);
+            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "light/1");
+            subscriber.sendMessage(getMessage, "light/1");
 
         } catch (MqttException me) {
             System.out.println(me.getMessage());
@@ -71,22 +72,27 @@ public class LightController {
     @GetMapping(path = "/{id}")
     public LightDto findById(@PathVariable Long id) {
 
+        Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
+
         String getMessageById = lightDao.SetGetByIdMessage("GET ", id);
 
         try {
-            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247");
-            subscriber.sendMessage(getMessageById);
+            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "light/" + id);
+            subscriber.sendMessage(getMessageById, "light/" + id);
+
 
         } catch (MqttException me) {
             System.out.println(me.getMessage());
         }
 
-        return lightDao.findById(id).map(light -> new LightDto(light)).orElse(null);
+        return new LightDto(light);
+       // return lightDao.findById(id).map(light -> new LightDto(light)).orElse(null);
     }
+
 
     @CrossOrigin
     @PutMapping(path = "/{id}/state")
-    public LightDto switchStatus(@PathVariable Long id, @RequestBody String body) {
+    public LightDto colorStatus(@PathVariable Long id, @RequestBody String body) {
 
         Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
 
@@ -105,8 +111,10 @@ public class LightController {
         String getPutMessage = lightDao.SetPutMessage("PUT ", id, body);
 
         try {
-            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247");
-            subscriber.sendMessage(getPutMessage);
+            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "light/" + id);
+            subscriber.sendMessage(getPutMessage, "light/" + id);
+
+
 
         } catch (MqttException me) {
             System.out.println(me.getMessage());
@@ -119,7 +127,7 @@ public class LightController {
 
 
     @CrossOrigin
-    @PutMapping(path = "/{id}/state")
+    @PutMapping(path = "/{id}/switch")
     public LightDto switchStatus(@PathVariable Long id) {
 
         String body;
@@ -140,8 +148,8 @@ public class LightController {
         String getPutMessage = lightDao.SetPutMessage("PUT", id, body);
 
         try {
-            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247");
-            subscriber.sendMessage(getPutMessage);
+            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "light/" + id);
+            subscriber.sendMessage(getPutMessage, "light/" + id);
 
         } catch (MqttException me) {
             System.out.println(me.getMessage());

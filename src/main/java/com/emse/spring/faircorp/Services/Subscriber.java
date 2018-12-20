@@ -1,14 +1,12 @@
 package com.emse.spring.faircorp.Services;
 
 
+
+import com.emse.spring.faircorp.model.Light;
+import com.emse.spring.faircorp.model.LightDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import java.net.URI;
-import java.net.URISyntaxException;
 
 
 
@@ -22,15 +20,16 @@ public class Subscriber implements MqttCallback {
 
     // initialisation
     private final int qos = 1;
-    private String topic = "actuator";
+
     private MqttClient client;
     private String clientId = "SpringServer";
     public String message;
-    public String username = "actuator";
+    public LightDto lightdto;
+    public String username = "General";
     public String password = "aaa";
 
 
-    public Subscriber (String host) throws MqttException {
+    public Subscriber (String host, String topic) throws MqttException {
 
         MqttConnectOptions conOpt = new MqttConnectOptions();
         conOpt.setCleanSession(true);
@@ -46,7 +45,7 @@ public class Subscriber implements MqttCallback {
         System.out.println("Connected");
 
         //subscribe au topic
-        this.client.subscribe(this.topic, qos);
+        this.client.subscribe(topic, qos);
 
     }
 
@@ -54,14 +53,14 @@ public class Subscriber implements MqttCallback {
 
     // publish a String to the topic
 
-    public void sendMessage(String payload) throws MqttException {
+    public void sendMessage(String payload, String topic) throws MqttException {
         MqttMessage message = new MqttMessage(payload.getBytes());
         message.setQos(qos);
-        this.client.publish(this.topic, message); // Blocking publish
-        System.out.println("Publishing message: "+ message);
+        this.client.publish(topic, message); // Blocking publish
+        System.out.println("Publishing message: "+ message + " on topic " + topic);
         System.out.println("Message published");
-       // this.client.disconnect();
-       // System.out.println("Disconnected");
+        this.client.disconnect();
+        System.out.println("Disconnected");
     }
 
     /**
@@ -93,17 +92,27 @@ public class Subscriber implements MqttCallback {
         System.out.println(message);
 
         String resp = message.substring(0, 4);
-        // header JSON required, string contient SEULEMENT LES ID? STATUS? COLOR & ROOMID
+        /** header JSON required, string contient SEULEMENT LES ID, STATUS, COLOR & ROOMID
+         * On suppose que toutes les lights sont initialisées de base
+         */
         if (resp.equals("JSON")) {
-            // map new dto, update light classes
+            // TRANSFORM STRING IN DTO
             //remove JSON header
             message = message.substring(5);
+            Light light;
+
+            ObjectMapper mapper = new ObjectMapper();
+            try{
+                lightdto = mapper.readValue(message, LightDto.class);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
 
 
 
         }
-        this.client.disconnect();
-        System.out.println("Disconnected");
 
     }
 
