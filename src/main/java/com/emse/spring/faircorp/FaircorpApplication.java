@@ -14,14 +14,14 @@ public class FaircorpApplication {
 		SpringApplication.run(FaircorpApplication.class, args);
 
 
-//		Subscriber s = null;
-//		try {
-//			s = new Subscriber("tcp://m20.cloudmqtt.com:15247", "actuator", "aaa");
-//
-//		} catch (MqttException me) {
-//			System.out.println(me.getMessage());
-//		}
-//
+		Subscriber s = null;
+		try {
+			s = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender");
+
+		} catch (MqttException me) {
+			System.out.println(me.getMessage());
+		}
+
 //		if (s != null) {
 //
 //			try {

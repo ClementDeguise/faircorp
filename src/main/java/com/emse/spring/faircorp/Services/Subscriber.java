@@ -2,13 +2,11 @@ package com.emse.spring.faircorp.Services;
 
 
 
-import com.emse.spring.faircorp.model.Light;
-import com.emse.spring.faircorp.model.LightDto;
+import com.emse.spring.faircorp.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-
-
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -18,13 +16,17 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class Subscriber implements MqttCallback {
 
+//    @Autowired
+//    private LightDAO lightDao;
+//    @Autowired
+//    private RoomDAO roomDao;
+
     // initialisation
     private final int qos = 1;
 
     private MqttClient client;
     private String clientId = "SpringServer";
     public String message;
-    public LightDto lightdto;
     public String username = "General";
     public String password = "aaa";
 
@@ -46,6 +48,8 @@ public class Subscriber implements MqttCallback {
 
         //subscribe au topic
         this.client.subscribe(topic, qos);
+
+
 
     }
 
@@ -98,21 +102,37 @@ public class Subscriber implements MqttCallback {
         if (resp.equals("JSON")) {
             // TRANSFORM STRING IN DTO
             //remove JSON header
-            message = message.substring(5);
-            Light light;
+            message = message.substring(message.indexOf("{"));
+            //Light light;
 
+            // renvoie toujours le JSON entier de la light
             ObjectMapper mapper = new ObjectMapper();
             try{
-                lightdto = mapper.readValue(message, LightDto.class);
+                LightDto lightdto = mapper.readValue(message, LightDto.class);
+                //dto mapped
+
+//                //populate corresponding light class
+//                light = lightDao.findById(lightdto.getId()).orElseThrow(IllegalArgumentException::new);
+//
+//                Long roomId = lightdto.getRoomId();
+//                Room room = roomDao.findById(roomId).orElse(null);
+//
+//                light.setColor(lightdto.getColor());
+//                light.setSaturation(lightdto.getSaturation());
+//                light.setStatus(lightdto.getStatus());
+//                light.setRoom(room);
+//
+//                //DAO links classes and DB, save changes
+//                lightDao.save(light);
+//                System.out.println("saved");
+
+
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
-
-
-
-
         }
+
 
     }
 

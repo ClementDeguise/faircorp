@@ -11,6 +11,8 @@ public class Light {
    // @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
+    private long saturation;
+
     // HEX COLOR
     @NotNull
     private String color;
@@ -28,10 +30,11 @@ public class Light {
     public Light() {
     }
 
-    public Light(Room room, String color, Status status) {
+    public Light(Room room, String color, Status status, Long saturation) {
         this.color = color;
         this.status = status;
         this.room = room;
+        this.saturation = saturation;
     }
 
     public Long getRoomId() {
@@ -67,4 +70,14 @@ public class Light {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    public Long getSaturation() {
+        return this.saturation;
+    }
+
+    public void setSaturation(Long saturation) {
+        this.saturation = saturation;
+    }
+
+
 }
