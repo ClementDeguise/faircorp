@@ -16,7 +16,8 @@ public class FaircorpApplication {
 
 		Subscriber s = null;
 		try {
-			s = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender");
+			s = new Subscriber("tcp://m20.cloudmqtt.com:15247", "answer", "SpringAnswer");
+			//s.sendMessage("hello", "answer");
 
 		} catch (MqttException me) {
 			System.out.println(me.getMessage());

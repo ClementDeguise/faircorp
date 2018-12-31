@@ -16,22 +16,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class Subscriber implements MqttCallback {
 
-//    @Autowired
-//    private LightDAO lightDao;
-//    @Autowired
-//    private RoomDAO roomDao;
+    @Autowired
+    private LightDAO lightDao;
+    @Autowired
+    private RoomDAO roomDao;
 
     // initialisation
     private final int qos = 1;
 
     private MqttClient client;
-    private String clientId = "SpringServer";
+    //private String clientId = "SpringServer";
     public String message;
     public String username = "General";
     public String password = "aaa";
 
 
-    public Subscriber (String host, String topic) throws MqttException {
+    public Subscriber (String host, String topic, String clientId) throws MqttException {
 
         MqttConnectOptions conOpt = new MqttConnectOptions();
         conOpt.setCleanSession(true);
@@ -89,43 +89,53 @@ public class Subscriber implements MqttCallback {
 
     /**
      * HANDLE JSON RESPONSE
+     * La BDD est updatée en décalé
      */
     public void messageArrived(String topic, MqttMessage mes) throws MqttException {
 
         message = String.format("[%s] %s", topic, new String(mes.getPayload()));
         System.out.println(message);
 
-        String resp = message.substring(0, 4);
+        String resp = message.substring(9, message.indexOf("/"));
         /** header JSON required, string contient SEULEMENT LES ID, STATUS, COLOR & ROOMID
          * On suppose que toutes les lights sont initialisées de base
          */
+        System.out.println(resp);
         if (resp.equals("JSON")) {
             // TRANSFORM STRING IN DTO
             //remove JSON header
             message = message.substring(message.indexOf("{"));
             //Light light;
 
+            System.out.println(message);
             // renvoie toujours le JSON entier de la light
             ObjectMapper mapper = new ObjectMapper();
             try{
                 LightDto lightdto = mapper.readValue(message, LightDto.class);
                 //dto mapped
+                System.out.println(lightdto.getId());
 
-//                //populate corresponding light class
-//                light = lightDao.findById(lightdto.getId()).orElseThrow(IllegalArgumentException::new);
-//
-//                Long roomId = lightdto.getRoomId();
-//                Room room = roomDao.findById(roomId).orElse(null);
-//
-//                light.setColor(lightdto.getColor());
-//                light.setSaturation(lightdto.getSaturation());
-//                light.setStatus(lightdto.getStatus());
-//                light.setRoom(room);
-//
-//                //DAO links classes and DB, save changes
-//                lightDao.save(light);
-//                System.out.println("saved");
+                //populate corresponding light class
+                Light light = lightDao.findById(lightdto.getId()).orElseThrow(IllegalArgumentException::new);
 
+
+                System.out.println("light found");
+
+                Long roomId = lightdto.getRoomId();
+                Room room = roomDao.findById(roomId).orElse(null);
+
+                light.setColor(lightdto.getColor());
+                light.setSaturation(lightdto.getSaturation());
+                light.setStatus(lightdto.getStatus());
+                light.setRoom(room);
+
+                //DAO links classes and DB, save changes
+                lightDao.save(light);
+                System.out.println("saved");
+
+
+                //this.client.disconnect();
+                //System.out.println("Disconnected");
 
             }
             catch (Exception e) {
@@ -140,16 +150,12 @@ public class Subscriber implements MqttCallback {
 
 
 
-//    public String JsonResponse() {
-//
-//        String resp = this.message.substring(0, 4);
-//        // header JSON required, string contient SEULEMENT LES ID? STATUS? COLOR & ROOMID
-//        if (resp.equals("JSON")) {
-//            // first, convert string into new dto
-//            return resp;
-//
-//        }
-//    }
+    public void Disconnect() throws MqttException {
+
+
+        this.client.disconnect();
+        System.out.println("Disconnected");
+    }
 
 
 

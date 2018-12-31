@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 
 
+
 @RestController
 
 @CrossOrigin
@@ -28,12 +29,11 @@ public class LightController {
     @Autowired
     private RoomDAO roomDao;
     //@Autowired
-    public Subscriber subscriber;
+    private Subscriber subscriber;
+
 
     //private String getMessage;
    // private String getMessageById;
-
-
 
 
 
@@ -49,7 +49,7 @@ public class LightController {
         String getMessage = "GET/ALL";
 
         try {
-            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender");
+            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender", "SpringReq");
             subscriber.sendMessage(getMessage, "sender");
 
 
@@ -69,20 +69,23 @@ public class LightController {
     @GetMapping(path = "/{id}")
     public LightDto findById(@PathVariable Long id) {
 
-        Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
-
         String idS = String.valueOf(id);
         String getMessageById = "GET/" + idS;
+
 
         //String getMessageById = lightDao.SetGetByIdMessage("GET ", id);
 
         try {
-            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender");
+            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender","SpringReq");
             subscriber.sendMessage(getMessageById, "sender");
+            //subscriber.Disconnect();
+
 
         } catch (MqttException me) {
             System.out.println(me.getMessage());
         }
+
+        Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
 
         return new LightDto(light);
        // return lightDao.findById(id).map(light -> new LightDto(light)).orElse(null);
@@ -112,7 +115,7 @@ public class LightController {
         String getPutMessage = lightDao.SetPutMessage("PUT", id, body);
 
         try {
-            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender");
+            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender","SpringReq");
             subscriber.sendMessage(getPutMessage, "sender");
 
 
@@ -150,7 +153,7 @@ public class LightController {
         String getPutMessage = lightDao.SetPutMessage("PUT ", id, body);
 
         try {
-            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender");
+            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender","SpringReq");
             subscriber.sendMessage(getPutMessage, "sender");
 
         } catch (MqttException me) {
@@ -185,7 +188,7 @@ public class LightController {
         String getPutMessage = lightDao.SetPutMessage("PUT ", id, body);
 
         try {
-            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender");
+            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender","SpringReq");
             subscriber.sendMessage(getPutMessage, "sender");
 
         } catch (MqttException me) {
@@ -224,7 +227,7 @@ public class LightController {
         }
 
         try {
-            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender");
+            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender","SpringReq");
             subscriber.sendMessage(getPutMessage, "sender");
 
         } catch (MqttException me) {
