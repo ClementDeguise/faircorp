@@ -105,10 +105,10 @@ public class LightController {
         //si getStatus renvoie Status.ON, alors Status.OFF, else: Status.ON
 
         if (light.getStatus() == Status.ON) {
-            body = "{\"on\": true}";
+            body = "{\"on\" : true}";
         }
         else {
-            body = "{\"on\": false}";
+            body = "{\"on\" : false}";
         }
 
 
@@ -150,7 +150,7 @@ public class LightController {
         }
 
         // here body is inputted
-        String getPutMessage = lightDao.SetPutMessage("PUT ", id, body);
+        String getPutMessage = lightDao.SetPutMessage("PUT", id, body);
 
         try {
             subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender","SpringReq");
@@ -185,7 +185,7 @@ public class LightController {
         }
 
         // here body is inputted
-        String getPutMessage = lightDao.SetPutMessage("PUT ", id, body);
+        String getPutMessage = lightDao.SetPutMessage("PUT", id, body);
 
         try {
             subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender","SpringReq");
@@ -206,25 +206,31 @@ public class LightController {
 
         Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
 
-        String roomNm = null;
-        String getPutMessage = null;
+        String roomNm = "0";
+        String getPutMessage;
         Long roomId;
         try {
-            roomId = Long.parseLong(body.substring(11, body.indexOf("}")));
+            roomId = Long.parseLong(body.substring(12), body.indexOf("}"));
+            System.out.println(roomId);
             light.setRoom(roomDao.getOne(roomId));
-            Room room = roomDao.findById(roomId).orElse(null);
+            Room room = roomDao.findById(roomId).orElseThrow(IllegalArgumentException::new);
 
             roomNm = room.getName();
+
+
         }
         catch (Exception e){
             System.out.println("Wrong body type");
         }
 
         // here body is inputted
-        if (roomNm != null) {
-            String Nm = "{\"name\": " + roomNm + "}";
-            getPutMessage = lightDao.SetPutMessage("PUT ", id, Nm);
-        }
+//        if (roomNm != null) {
+//            String Nm = "{\"name\": " + roomNm + "}";
+//            getPutMessage = lightDao.SetPutMessage("PUT", id, Nm);
+//        }
+
+        String Nm = "{\"name\": " + roomNm + "}";
+        getPutMessage = lightDao.SetPutMessage("PUT", id, Nm);
 
         try {
             subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender","SpringReq");

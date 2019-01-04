@@ -100,6 +100,9 @@ public class Subscriber implements MqttCallback {
         /** header JSON required, string contient SEULEMENT LES ID, STATUS, COLOR & ROOMID
          * On suppose que toutes les lights sont initialisées de base
          */
+
+        //TODO : faire marcher la bdd
+        //TODO rooms
         System.out.println(resp);
         if (resp.equals("JSON")) {
             // TRANSFORM STRING IN DTO
@@ -109,38 +112,38 @@ public class Subscriber implements MqttCallback {
 
             System.out.println(message);
             // renvoie toujours le JSON entier de la light
-            ObjectMapper mapper = new ObjectMapper();
-            try{
-                LightDto lightdto = mapper.readValue(message, LightDto.class);
-                //dto mapped
-                System.out.println(lightdto.getId());
-
-                //populate corresponding light class
-                Light light = lightDao.findById(lightdto.getId()).orElseThrow(IllegalArgumentException::new);
-
-
-                System.out.println("light found");
-
-                Long roomId = lightdto.getRoomId();
-                Room room = roomDao.findById(roomId).orElse(null);
-
-                light.setColor(lightdto.getColor());
-                light.setSaturation(lightdto.getSaturation());
-                light.setStatus(lightdto.getStatus());
-                light.setRoom(room);
-
-                //DAO links classes and DB, save changes
-                lightDao.save(light);
-                System.out.println("saved");
+//            ObjectMapper mapper = new ObjectMapper();
+//            try{
+//                LightDto lightdto = mapper.readValue(message, LightDto.class);
+//                //dto mapped
+//                System.out.println(lightdto.getId());
+//
+//                //populate corresponding light class
+//                Light light = lightDao.findById(lightdto.getId()).orElseThrow(IllegalArgumentException::new);
+//
+//
+//                System.out.println("light found");
+//
+//                Long roomId = lightdto.getRoomId();
+//                Room room = roomDao.findById(roomId).orElse(null);
+//
+//                light.setColor(lightdto.getColor());
+//                light.setSaturation(lightdto.getSaturation());
+//                light.setStatus(lightdto.getStatus());
+//                light.setRoom(room);
+//
+//                //DAO links classes and DB, save changes
+//                lightDao.save(light);
+//                System.out.println("saved");
 
 
                 //this.client.disconnect();
                 //System.out.println("Disconnected");
 
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+//            }
+//            catch (Exception e) {
+//                e.printStackTrace();
+//            }
         }
 
 
