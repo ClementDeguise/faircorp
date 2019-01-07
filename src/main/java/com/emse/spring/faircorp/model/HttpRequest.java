@@ -13,7 +13,7 @@ public class HttpRequest {
 
     // handle server request
     private String charset = "UTF_8";
-    private String targetUrl = "http://localhost:8080/";
+    private String targetUrl = "https://faircorp-app-deguise.cleverapps.io/";
     //private String content_type = "application/json";
 
     public HttpRequest(){};

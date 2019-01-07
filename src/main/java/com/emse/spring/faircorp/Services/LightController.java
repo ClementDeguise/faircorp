@@ -8,6 +8,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,7 +68,7 @@ public class LightController {
 
     @CrossOrigin
     @GetMapping(path = "/{id}")
-    public LightDto findById(@PathVariable Long id) {
+    public LightDto findById(@PathVariable Long id, HttpServletResponse response) {
 
         String idS = String.valueOf(id);
         String getMessageById = "GET/" + idS;
@@ -87,6 +88,7 @@ public class LightController {
 
         Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
 
+        response.setHeader("Access-Control-Allow-Origin", "*");
         return new LightDto(light);
        // return lightDao.findById(id).map(light -> new LightDto(light)).orElse(null);
     }
