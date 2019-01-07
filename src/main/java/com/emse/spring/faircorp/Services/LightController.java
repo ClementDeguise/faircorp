@@ -42,7 +42,7 @@ public class LightController {
 
     @CrossOrigin
     @GetMapping
-    public List<LightDto> findAll() {
+    public List<LightDto> findAll(HttpServletResponse response) {
 
         //ask database
         //wait for db update on request transfer
@@ -58,6 +58,7 @@ public class LightController {
             System.out.println(me.getMessage());
         }
 
+        response.setHeader("Access-Control-Allow-Origin", "*");
         return lightDao.findAll()
                 .stream()
                 .map(LightDto::new)
@@ -97,7 +98,7 @@ public class LightController {
 
     @CrossOrigin
     @PutMapping(path = "/{id}/switch")
-    public LightDto switchStatus(@PathVariable Long id) {
+    public LightDto switchStatus(@PathVariable Long id, HttpServletResponse response) {
 
         String body;
 
@@ -126,6 +127,7 @@ public class LightController {
         }
 
 
+        response.setHeader("Access-Control-Allow-Origin", "*");
         return new LightDto(light);
     }
 
@@ -135,7 +137,7 @@ public class LightController {
 
     @CrossOrigin
     @PutMapping(path = "/{id}/color")
-    public LightDto colorStatus(@PathVariable Long id, @RequestBody String body) {
+    public LightDto colorStatus(@PathVariable Long id, @RequestBody String body, HttpServletResponse response) {
 
         Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
 
@@ -162,6 +164,7 @@ public class LightController {
             System.out.println(me.getMessage());
         }
 
+        response.setHeader("Access-Control-Allow-Origin", "*");
         return new LightDto(light);
     }
 
@@ -172,7 +175,7 @@ public class LightController {
 
     @CrossOrigin
     @PutMapping(path = "/{id}/sat")
-    public LightDto setStatus(@PathVariable Long id, @RequestBody String body) {
+    public LightDto setStatus(@PathVariable Long id, @RequestBody String body, HttpServletResponse response) {
 
         Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
 
@@ -197,6 +200,7 @@ public class LightController {
             System.out.println(me.getMessage());
         }
 
+        response.setHeader("Access-Control-Allow-Origin", "*");
         return new LightDto(light);
     }
 
@@ -268,7 +272,7 @@ public class LightController {
 
     @CrossOrigin
     @PostMapping
-    public LightDto create(@RequestBody LightDto dto) {
+    public LightDto create(@RequestBody LightDto dto, HttpServletResponse response) {
         Light light = null;
 
         if (dto.getId() != null) light = lightDao.findById(dto.getId()).orElse(null);
@@ -285,6 +289,7 @@ public class LightController {
         }
 
 
+        response.setHeader("Access-Control-Allow-Origin", "*");
 
         return new LightDto(light);
     }
