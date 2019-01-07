@@ -7,19 +7,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.transaction.Transactional;
 
 
 /**
  * A sample application that demonstrates how to use the Paho MQTT v3.1 Client blocking API.
  */
 
-
+//@Service
 public class Subscriber implements MqttCallback {
 
     @Autowired
     private LightDAO lightDao;
     @Autowired
     private RoomDAO roomDao;
+
+    private LightController lthctrl;
 
     // initialisation
     private final int qos = 1;
@@ -91,17 +98,20 @@ public class Subscriber implements MqttCallback {
      * HANDLE JSON RESPONSE
      * La BDD est updatée en décalé
      */
+
     public void messageArrived(String topic, MqttMessage mes) throws MqttException {
 
         message = String.format("[%s] %s", topic, new String(mes.getPayload()));
         System.out.println(message);
+
+        //Light light = lightDao.findById(9L).orElseThrow(IllegalArgumentException::new);
 
         String resp = message.substring(9, message.indexOf("/"));
         /** header JSON required, string contient SEULEMENT LES ID, STATUS, COLOR & ROOMID
          * On suppose que toutes les lights sont initialisées de base
          */
 
-        //TODO : faire marcher la bdd
+
         //TODO rooms
         System.out.println(resp);
         if (resp.equals("JSON")) {
@@ -112,15 +122,31 @@ public class Subscriber implements MqttCallback {
 
             System.out.println(message);
             // renvoie toujours le JSON entier de la light
-//            ObjectMapper mapper = new ObjectMapper();
-//            try{
+ //           ObjectMapper mapper = new ObjectMapper();
+            try{
+
+                HttpRequest httpRequest = new HttpRequest();
+
+                String postRequest = httpRequest.PostRequest("api/lights", message);
+
+                System.out.println(postRequest);
+
+
+
+
+
 //                LightDto lightdto = mapper.readValue(message, LightDto.class);
 //                //dto mapped
 //                System.out.println(lightdto.getId());
 //
 //                //populate corresponding light class
-//                Light light = lightDao.findById(lightdto.getId()).orElseThrow(IllegalArgumentException::new);
-//
+//                Light light = lightDao.findById(9L).orElseThrow(IllegalArgumentException::new);
+
+               // LightDto dto =lthctrl.create(lightdto);
+
+
+
+                //Light light = em.find(Light.class, lightdto.getId());
 //
 //                System.out.println("light found");
 //
@@ -140,10 +166,10 @@ public class Subscriber implements MqttCallback {
                 //this.client.disconnect();
                 //System.out.println("Disconnected");
 
-//            }
-//            catch (Exception e) {
-//                e.printStackTrace();
-//            }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
 
@@ -161,6 +187,20 @@ public class Subscriber implements MqttCallback {
     }
 
 
+
+//    public LightDto create(LightDto dto) {
+//        Light light = null;
+//
+//
+//        light = lightDao.save(new Light(roomDao.getOne(dto.getRoomId()), dto.getColor(), dto.getStatus(), dto.getSaturation()));
+//        // methode de base de la DAO
+//        // l'ordre d'appel est important et doit respecter celui du constructeur
+//
+//
+//        if (dto.getId() != null) light = lightDao.findById(dto.getId()).orElse(null);
+//
+//        return new LightDto(light);
+//    }
 
 
 

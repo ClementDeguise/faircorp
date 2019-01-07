@@ -170,7 +170,7 @@ public class LightController {
 
     @CrossOrigin
     @PutMapping(path = "/{id}/sat")
-    public LightDto satStatus(@PathVariable Long id, @RequestBody String body) {
+    public LightDto setStatus(@PathVariable Long id, @RequestBody String body) {
 
         Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
 
@@ -206,7 +206,7 @@ public class LightController {
 
         Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
 
-        String roomNm = "0";
+        String roomNm = "1";
         String getPutMessage;
         Long roomId;
         try {
@@ -229,7 +229,7 @@ public class LightController {
 //            getPutMessage = lightDao.SetPutMessage("PUT", id, Nm);
 //        }
 
-        String Nm = "{\"name\": " + roomNm + "}";
+        String Nm = "{\"name\": " + "\"" + roomNm + "\"" + "}";
         getPutMessage = lightDao.SetPutMessage("PUT", id, Nm);
 
         try {
@@ -253,28 +253,31 @@ public class LightController {
 
 
 
-/*
+
     @CrossOrigin
     @PostMapping
     public LightDto create(@RequestBody LightDto dto) {
         Light light = null;
 
+        if (dto.getId() != null) light = lightDao.findById(dto.getId()).orElse(null);
+
         if (light == null) {
-            light = lightDao.save(new Light(roomDao.getOne(dto.getRoomId()), dto.getColor(), dto.getStatus()));
+            light = lightDao.save(new Light(roomDao.getOne(dto.getRoomId()), dto.getColor(), dto.getStatus(), dto.getSaturation()));
             // methode de base de la DAO
             // l'ordre d'appel est important et doit respecter celui du constructeur
         } else {
             light.setColor(dto.getColor());
             light.setStatus(dto.getStatus());
+            light.setSaturation(dto.getSaturation());
             lightDao.save(light);
         }
 
-        if (dto.getId() != null) light = lightDao.findById(dto.getId()).orElse(null);
+
 
         return new LightDto(light);
     }
 
-
+/*
     @DeleteMapping(path = "/{id}")
     @CrossOrigin
     public void delete(@PathVariable Long id, HttpServletResponse response) {
