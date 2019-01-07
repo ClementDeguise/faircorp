@@ -144,10 +144,10 @@ public class LightController {
         String col;
 
         // FORMAT "{"color": #ffffff}"
+        JSONObject json = new JSONObject(body);
+        col = json.getString("color");
 
         try {
-            JSONObject json = new JSONObject(body);
-            col = json.getString("color");
             //col = body.substring(11, 16);
             light.setColor(col);
         }
@@ -156,7 +156,7 @@ public class LightController {
         }
 
         // here body is inputted
-        String getPutMessage = lightDao.SetPutMessage("PUT", id, body);
+        String getPutMessage = lightDao.SetPutMessage("PUT", id, "{\"color\" : " + col + "}");
 
         try {
             subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender","SpringReq");
@@ -183,9 +183,10 @@ public class LightController {
 
         Long sat;
         // format {"sat": 100}
+
+        JSONObject json = new JSONObject(body);
+        sat = json.getLong("sat");
         try {
-            JSONObject json = new JSONObject(body);
-            sat = json.getLong("sat");
             light.setSaturation(sat);
         }
         catch (Exception e){
@@ -193,7 +194,7 @@ public class LightController {
         }
 
         // here body is inputted
-        String getPutMessage = lightDao.SetPutMessage("PUT", id, body);
+        String getPutMessage = lightDao.SetPutMessage("PUT", id, "{\"sat\" : " + sat + "}");
 
         try {
             subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender","SpringReq");
