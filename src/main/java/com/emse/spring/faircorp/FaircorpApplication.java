@@ -14,7 +14,7 @@ public class FaircorpApplication {
 		SpringApplication.run(FaircorpApplication.class, args);
 
 
-		//TODO autodeco, doit rrelancer le server au bout d'un temps, mettre une autodeco reco ici
+		//TODO autodeco, doit relancer le server au bout d'un temps, mettre une autodeco reco ici
 		Subscriber s = null;
 		try {
 			s = new Subscriber("tcp://m20.cloudmqtt.com:15247", "answer", "SpringAnswer");

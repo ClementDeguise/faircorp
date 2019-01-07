@@ -139,7 +139,7 @@ public class LightController {
 
         String col;
 
-        // FORMAT "{"color": #ffff}"
+        // FORMAT "{"color": #ffffff}"
 
         try {
             col = body.substring(11, 16);
@@ -199,29 +199,39 @@ public class LightController {
     }
 
 
-    // ROOM NAME CHANGING
-    @CrossOrigin
-    @PutMapping(path = "/{id}")
-    public LightDto roomStatus(@PathVariable Long id, @RequestBody String body) {
+//    // ROOM NAME CHANGING
+//    @CrossOrigin
+//    @PutMapping(path = "/{id}")
+//    public LightDto roomStatus(@PathVariable Long id, @RequestBody String body) {
+//
+//        Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
+//
+//        String roomNm;
+//        String getPutMessage;
+//        int roomId;
+//
+//
+//        roomId = Integer.parseInt(body);
+//        System.out.println(roomId);
+//        light.setRoom(roomDao.getOne(roomId));
+//        Room room = roomDao.findById(roomId).orElseThrow(IllegalArgumentException::new);
+//
+//        roomNm = room.getName();
 
-        Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
 
-        String roomNm = "1";
-        String getPutMessage;
-        Long roomId;
-        try {
-            roomId = Long.parseLong(body.substring(12), body.indexOf("}"));
-            System.out.println(roomId);
-            light.setRoom(roomDao.getOne(roomId));
-            Room room = roomDao.findById(roomId).orElseThrow(IllegalArgumentException::new);
-
-            roomNm = room.getName();
-
-
-        }
-        catch (Exception e){
-            System.out.println("Wrong body type");
-        }
+//        try {
+//            roomId = Long.parseLong(body.substring(12), body.indexOf("}"));
+//            System.out.println(roomId);
+////            light.setRoom(roomDao.getOne(roomId));
+////            Room room = roomDao.findById(roomId).orElseThrow(IllegalArgumentException::new);
+////
+////            roomNm = room.getName();
+//
+//
+//        }
+//        catch (Exception e){
+//            System.out.println("Wrong body type");
+//        }
 
         // here body is inputted
 //        if (roomNm != null) {
@@ -229,19 +239,19 @@ public class LightController {
 //            getPutMessage = lightDao.SetPutMessage("PUT", id, Nm);
 //        }
 
-        String Nm = "{\"name\": " + "\"" + roomNm + "\"" + "}";
-        getPutMessage = lightDao.SetPutMessage("PUT", id, Nm);
+//        String Nm = "{\"name\": " + "\"" + roomNm + "\"" + "}";
+//        getPutMessage = lightDao.SetPutMessage("PUT", id, Nm);
 
-        try {
-            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender","SpringReq");
-            subscriber.sendMessage(getPutMessage, "sender");
-
-        } catch (MqttException me) {
-            System.out.println(me.getMessage());
-        }
-
-        return new LightDto(light);
-    }
+//        try {
+//            subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender","SpringReq");
+//            //subscriber.sendMessage(getPutMessage, "sender");
+//
+//        } catch (MqttException me) {
+//            System.out.println(me.getMessage());
+//        }
+//
+//        return new LightDto(light);
+//    }
 
 
 

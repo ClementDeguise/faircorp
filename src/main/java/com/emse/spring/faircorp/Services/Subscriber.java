@@ -112,7 +112,7 @@ public class Subscriber implements MqttCallback {
          */
 
 
-        //TODO rooms
+
         System.out.println(resp);
         if (resp.equals("JSON")) {
             // TRANSFORM STRING IN DTO
@@ -140,7 +140,7 @@ public class Subscriber implements MqttCallback {
 //                System.out.println(lightdto.getId());
 //
 //                //populate corresponding light class
-//                Light light = lightDao.findById(9L).orElseThrow(IllegalArgumentException::new);
+//                Light light = lightDao.findById(lightdto.getId()).orElseThrow(IllegalArgumentException::new);
 
                // LightDto dto =lthctrl.create(lightdto);
 
@@ -180,8 +180,6 @@ public class Subscriber implements MqttCallback {
 
 
     public void Disconnect() throws MqttException {
-
-
         this.client.disconnect();
         System.out.println("Disconnected");
     }
