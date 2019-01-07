@@ -270,6 +270,7 @@ public class LightController {
 
 
 
+
     @CrossOrigin
     @PostMapping
     public LightDto create(@RequestBody LightDto dto, HttpServletResponse response) {
