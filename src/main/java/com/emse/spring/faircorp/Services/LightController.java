@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
-
+import org.json.JSONObject;
 
 
 
@@ -146,7 +146,9 @@ public class LightController {
         // FORMAT "{"color": #ffffff}"
 
         try {
-            col = body.substring(11, 16);
+            JSONObject json = new JSONObject(body);
+            col = json.getString("color");
+            //col = body.substring(11, 16);
             light.setColor(col);
         }
         catch (Exception e){
@@ -182,7 +184,8 @@ public class LightController {
         Long sat;
         // format {"sat": 100}
         try {
-            sat = Long.parseLong(body.substring(8, body.indexOf("}")));
+            JSONObject json = new JSONObject(body);
+            sat = json.getLong("sat");
             light.setSaturation(sat);
         }
         catch (Exception e){
@@ -258,11 +261,6 @@ public class LightController {
 //
 //        return new LightDto(light);
 //    }
-
-
-
-
-
 
 
 
