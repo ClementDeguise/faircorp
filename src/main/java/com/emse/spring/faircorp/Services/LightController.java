@@ -20,7 +20,7 @@ import org.json.JSONObject;
 
 @RestController
 
-@CrossOrigin
+@CrossOrigin // (origins = { "https://192.68.3.1" })
 @RequestMapping("/api/lights")
 @Transactional
 public class LightController {
@@ -156,7 +156,7 @@ public class LightController {
         }
 
         // here body is inputted
-        String getPutMessage = lightDao.SetPutMessage("PUT", id, "{\"color\" : " + col + "}");
+        String getPutMessage = lightDao.SetPutMessage("PUT", id, "{\"color\" : " + "#" + col + "}");
 
         try {
             subscriber = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender","SpringReq");
